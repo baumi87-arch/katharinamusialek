@@ -155,7 +155,8 @@ strong { color: var(--charcoal); font-weight: 600; }
   left: 0;
   right: 0;
   z-index: 1000;
-  height: var(--nav-h);
+  height: calc(var(--nav-h) + env(safe-area-inset-top, 0px));
+  padding-top: env(safe-area-inset-top, 0px);
   transition: background var(--transition), box-shadow var(--transition);
 }
 
@@ -472,10 +473,9 @@ strong { color: var(--charcoal); font-weight: 600; }
   line-height: 1.4;
   color: var(--charcoal);
   margin-bottom: 1rem;
-  quotes: "„" """ "‚" "'";
 }
-.pull-quote::before { content: open-quote; }
-.pull-quote::after  { content: close-quote; }
+.pull-quote::before { content: ''; }
+.pull-quote::after  { content: ''; }
 
 cite {
   font-family: var(--font-sans);
@@ -546,7 +546,7 @@ cite {
 }
 
 .approach__img-caption {
-  max-width: 680px;
+  max-width: 100%;
 }
 .approach__img-caption h3 {
   font-family: var(--font-serif);
@@ -579,7 +579,7 @@ cite {
   object-position: 50% 25%;
 }
 .approach__img-wrap--right img {
-  object-position: 50% 30%;
+  object-position: center top;
 }
 
 /* =========================================
@@ -715,6 +715,12 @@ cite {
   overflow: hidden;
   height: 600px;
   position: relative;
+}
+.about__img-main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
 }
 .about__img-main::before {
   content: '';
@@ -1122,9 +1128,25 @@ cite {
 }
 
 @media (max-width: 900px) {
+  /* Nav immer sichtbar auf Mobile – dunkelgrüner Hintergrund */
+  .nav {
+    background: rgba(28, 61, 48, 0.92);
+    backdrop-filter: blur(16px);
+  }
+  .nav.scrolled {
+    background: rgba(255,255,255,0.97);
+  }
+  /* Logo-Farben immer hell auf Mobile (wegen dunklem Hintergrund) */
+  .nav__logo-name { color: var(--white) !important; }
+  .nav__logo-sub  { color: rgba(255,255,255,0.65) !important; }
+  .nav__burger span { background: var(--white) !important; }
+  .nav.scrolled .nav__logo-name { color: var(--charcoal) !important; }
+  .nav.scrolled .nav__logo-sub  { color: var(--mid) !important; }
+  .nav.scrolled .nav__burger span { background: var(--charcoal) !important; }
+
   .nav__links {
     position: fixed;
-    top: var(--nav-h);
+    top: calc(var(--nav-h) + env(safe-area-inset-top, 0px));
     left: 0;
     right: 0;
     background: rgba(255,255,255,0.97);
@@ -1158,7 +1180,11 @@ cite {
 
 /* Mobile */
 @media (max-width: 640px) {
-  :root { --nav-h: 64px; }
+  :root { --nav-h: 60px; }
+
+  /* Logo-Subtitle auf sehr kleinen Screens ausblenden */
+  .nav__logo-sub { display: none; }
+  .nav__logo-name { font-size: 1rem; }
 
   .hero__actions { flex-direction: column; }
   .hero__actions .btn { text-align: center; justify-content: center; }
